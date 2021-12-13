@@ -1,10 +1,9 @@
 import streamlit as st
 
+
 st.sidebar.title('Machine Learning Code Generator')
-st.sidebar.header('Model')
-st.sidebar.text('Select your model!')
-model = st.sidebar.selectbox('Select', ['Linear Regression',
-                                        'Logistic Regression', 'Decision Tree'])
+model = st.sidebar.selectbox('Select your model', ['Linear Regression',
+                                                   'Logistic Regression', 'Decision Tree'])
 
 st.sidebar.checkbox('Min Max Scaling')
 st.sidebar.checkbox('Standard Scaler')
@@ -12,9 +11,6 @@ st.sidebar.checkbox('Standard Scaler')
 # NaN Values Sidebar
 st.sidebar.header('NaN Values')
 nan_value_selection = st.sidebar.radio('NaN Values', ['Drop', 'Fill'])
-
-# if nan_value_selection == 'Fill':
-#     fill_selection = st.sidebar.selectbox('Select', ['Mean', 'Median'])
 
 if nan_value_selection:
     if nan_value_selection == 'Drop':
@@ -25,20 +21,30 @@ if nan_value_selection:
         nan_values_text = f"data.fillna(method='{fill_selection.lower()}')"
 
 
-encoding = st.sidebar.radio('Radio', ['One Hot Encoding', 'Label Encoding'])
+encoding = st.sidebar.radio(
+    'Encoding Type', ['One Hot Encoding', 'Label Encoding'])
 
 train_size = st.sidebar.slider(
     'Train Size Percentage:', min_value=1, max_value=99)
 
 model_types = {'Linear Regression':
                {'model_name': 'LinearRegression()',
-                'import': 'from sklearn.linear_model import LinearRegression'},
+                'import': 'from sklearn.linear_model import LinearRegression',
+                'type': ['regression']},
                'Logistic Regression':
                {'model_name': 'LogisticRegression()',
-                'import': 'from sklearn.linear_model import LogisticRegression'},
+                'import': 'from sklearn.linear_model import LogisticRegression',
+                'type': ['classification']},
                'Decision Tree':
                {'model_name': 'DecisionTreeClassifier()',
-                'import': 'from sklearn.tree import DecisionTreeClassifier'}}
+                'import': 'from sklearn.tree import DecisionTreeClassifier',
+                'type': ['classification', 'regression']}}
+
+evaluations_dict = {'Mean Absolute Error': 'mean_absolute_error',
+                    'Mean Squared Error': 'mean_squared_error',
+                    'Roc Auc Score': 'roc_auc_score',
+                    'F1 Score': 'f1_score',
+                    'Accuracy Score': 'accuracy_score'}
 
 if encoding:
     if encoding == 'Label Encoding':
@@ -51,17 +57,35 @@ data["column_name"] = label_encoder.fit_transform(data["column_name"])"""
         encoding_text = ''
 
 
-st.code(f"""
+# Model Evaluation
+
+if 'regression' in model_types[model]['type']:
+    evaluation_types = st.sidebar.selectbox(
+        'Evaluation Type:', ['Mean Absolute Error', 'Mean Squared Error'])
+
+elif 'classification' in model_types[model]['type']:
+    evaluation_types = st.sidebar.selectbox(
+        'Evaluation Type:', ['Accuracy Score', 'F1 Score', 'Roc Auc Score'])
 
 
-==================
-Please provide data 
+def download_file(code_file):
+    with open('code.py', 'w') as file:
+        file.writelines(code_file)
+
+
+st.title('🥷 ML Code Generator')
+
+text = f"""
+# ==================
+# Please provide data 
 
 data = pd.read_csv()
-==================
+# ==================
 
 ## Importings 
 {model_types[model]['import']}
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import {evaluations_dict[evaluation_types]}
 
 ## Model Pre-processing
 {nan_values_text}
@@ -71,10 +95,17 @@ data = pd.read_csv()
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size={train_size})
 
 ## Model Fitting
-
 model = {model_types[model]['model_name']}
 model.fit(X_train, y_train)
 
-## Evaluate
+## Prediction
+preds = model.predict(X_test)
 
-""")
+## Evaluate
+score = {evaluations_dict[evaluation_types]}(preds, y_test)
+print(score)
+
+"""
+code_file = st.code(text)
+
+st.button('Download .py', on_click=download_file(text))
