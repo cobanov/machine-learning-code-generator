@@ -1,8 +1,8 @@
 # Machine Learning Code Generator
 
-Automatic machine learning code generator with lots of options.
+![page](ml-code-logo.png)
 
-![page](page.jpeg)
+Automatic machine learning code generator with lots of options.
 
 ## Usage
 
