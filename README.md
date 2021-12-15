@@ -1,8 +1,12 @@
 # Machine Learning Code Generator
 
+## [Try Demo!](https://ml-code-generator.herokuapp.com/)
+
 Automatic machine learning code generator with lots of options.
 
 ![page](page.jpeg)
+
+
 
 ## Usage
 
