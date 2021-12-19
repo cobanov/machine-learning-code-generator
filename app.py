@@ -119,6 +119,7 @@ import matplotlib.pyplot as plt
 {settings.model_types[model]['import']}
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import {settings.evaluations_dict[evaluation_types]}
+from sklearn.metrics import confusion_matrix
 
 from sklearn.preprocessing import LabelEncoder
 ----
