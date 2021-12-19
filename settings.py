@@ -9,10 +9,11 @@ model_types = {'Linear Regression':
                'Decision Tree':
                {'model_name': 'DecisionTreeClassifier()',
                 'import': 'from sklearn.tree import DecisionTreeClassifier',
-                'type': ['classification', 'regression']}}
+                'type': ['classification']}}
 
 evaluations_dict = {'Mean Absolute Error': 'mean_absolute_error',
                     'Mean Squared Error': 'mean_squared_error',
                     'Roc Auc Score': 'roc_auc_score',
                     'F1 Score': 'f1_score',
                     'Accuracy Score': 'accuracy_score'}
+
