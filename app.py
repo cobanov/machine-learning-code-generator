@@ -1,7 +1,7 @@
 import streamlit as st
 import settings
 
-st.sidebar.title("Machine Learning Code Generator")
+st.sidebar.title("🦊 Cobanov")
 
 st.sidebar.title("Model")
 
@@ -63,19 +63,7 @@ test_size = st.sidebar.slider(
 )
 ######################################
 
-############ Scaling ############
-minmax_scaling_status = st.sidebar.checkbox("Min Max Scaling")
-standard_scaler_status = st.sidebar.checkbox("Standard Scaler")
-visualize_missing_status = st.sidebar.checkbox("Visualize Missing")
 
-if visualize_missing_status:
-    visualize_missing_text = {
-        "import": "import missingno as msno",
-        "code": "msno.matrix(data)",
-    }
-else:
-    visualize_missing_text = {"import": "", "code": ""}
-####################################
 
 
 st.sidebar.title("Evaluation")
@@ -103,6 +91,21 @@ plt.show()"""
 else:
     confusion_matrix_text = ""
     confusion_matrix_import = ""
+
+############ Scaling ############
+st.sidebar.title('Next Update')
+minmax_scaling_status = st.sidebar.checkbox("Min Max Scaling")
+standard_scaler_status = st.sidebar.checkbox("Standard Scaler")
+visualize_missing_status = st.sidebar.checkbox("Visualize Missing")
+
+if visualize_missing_status:
+    visualize_missing_text = {
+        "import": "import missingno as msno",
+        "code": "msno.matrix(data)",
+    }
+else:
+    visualize_missing_text = {"import": "", "code": ""}
+####################################
 
 st.title("🥷 ML Code Generator")
 
